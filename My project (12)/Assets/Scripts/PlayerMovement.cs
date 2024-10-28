@@ -21,7 +21,7 @@ public class PlayerMovement : MonoBehaviour
     {
         lives = 1;
     }
-    private void Update()
+    private void FixedUpdate()
     {
         Walk();
         CheckGround();
@@ -29,7 +29,7 @@ public class PlayerMovement : MonoBehaviour
     }
     void Walk()
     {
-        moveVector.x = Input.GetAxis("Horizontal");
+        moveVector.x = Input.GetAxisRaw("Horizontal");
         rb.velocity = new Vector2(moveVector.x * moveSpeed, rb.velocity.y);
         if (moveVector.x < 0) transform.localScale = new Vector3(-1, 1, 1);
         if (moveVector.x > 0) transform.localScale = new Vector3(1, 1, 1);
@@ -41,11 +41,11 @@ public class PlayerMovement : MonoBehaviour
 
     void Jump()
     {
-        if (Input.GetKey(KeyCode.Space) && (isGrounded == true))
+        if (Input.GetKey(KeyCode.Space) && isGrounded)
         {
             Debug.Log("jump");
             rb.velocity = new Vector3(0, 0, 0);
-            rb.AddForce(Vector2.up * jumpForce * 10);
+            rb.AddForce(Vector2.up * jumpForce * 10, ForceMode2D.Impulse);
         }
     }
     private void CheckGround()
